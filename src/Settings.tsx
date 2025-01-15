@@ -173,7 +173,7 @@ export const Settings = ({ canvas }: Props) => {
       setX(Math.round(obj.left).toString());
       setY(Math.round(obj.top).toString());
       setIconName(extractPrefix(obj.id));
-      setShadowBlur(obj.shadow.blur);
+      if (obj.shadow) setShadowBlur(obj.shadow.blur);
     }
   };
 
