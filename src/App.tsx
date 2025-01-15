@@ -176,7 +176,7 @@ const App: React.FC = () => {
       height: newHeight - 4,
       stroke: "white",
       strokeWidth: 4,
-      fill: "transparent",
+      fill: "#00000000",
       id: "border",
     });
     canvas.add(whiteRect);
