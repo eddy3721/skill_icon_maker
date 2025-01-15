@@ -10,6 +10,7 @@ import {
   createListCollection,
   Table,
   IconButton,
+  Text,
 } from "@chakra-ui/react";
 import {
   SelectContent,
@@ -234,7 +235,9 @@ const LayerList = ({ canvas }: { canvas: Canvas | null }) => {
                   <Flex justify="space-between">
                     <Flex gap={2} align="center">
                       <Icon width={24} icon={getObjectIcon(layer.type)} />
-                      {layer.id}
+                      <Text maxWidth="180px" truncate>
+                        {layer.id}
+                      </Text>
                     </Flex>
                     {layer.id === selectedLayer && (
                       <IconButton

@@ -399,7 +399,7 @@ export const Settings = ({ canvas }: Props) => {
                 mt={2.5}
                 max={10}
                 w="100%"
-                defaultValue={[Number(shadowBlur)]}
+                value={[Number(shadowBlur)]}
                 onChange={handleShadowBlurChange}
               />
             </Flex>
