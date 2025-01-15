@@ -296,7 +296,7 @@ export const Settings = ({ canvas }: Props) => {
         left: selectedObject.left,
         top: selectedObject.top,
         stroke: selectedObject.stroke,
-        fill: selectedObject.fill,
+        fill: newPathData.fill,
         strokeWidth: newPathData.strokeWidth,
         strokeLineCap: newPathData.strokeLinecap as CanvasLineCap,
         strokeLineJoin: newPathData.strokeLinejoin as CanvasLineJoin,
@@ -341,6 +341,7 @@ export const Settings = ({ canvas }: Props) => {
   //驗證顏色格式
   const validateColor = (color: any) => {
     const parsed = parseColor(color);
+    console.log(parsed);
     return parsed ? parsed : parseColor("#000000");
   };
 
