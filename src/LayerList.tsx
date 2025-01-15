@@ -235,7 +235,7 @@ const LayerList = ({ canvas }: { canvas: Canvas | null }) => {
                   <Flex justify="space-between">
                     <Flex gap={2} align="center">
                       <Icon width={24} icon={getObjectIcon(layer.type)} />
-                      <Text maxWidth="180px" truncate>
+                      <Text maxWidth="150px" truncate>
                         {layer.id}
                       </Text>
                     </Flex>

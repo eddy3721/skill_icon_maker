@@ -247,6 +247,7 @@ const App: React.FC = () => {
       reader.onload = (e) => {
         const json = JSON.parse(e.target?.result as string);
         canvas.loadFromJSON(json).then(function () {
+          setBgColor(json.background);
           canvas.renderAll();
         });
       };
