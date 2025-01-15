@@ -44,8 +44,8 @@ const App: React.FC = () => {
   useEffect(() => {
     if (canvasRef.current) {
       const initCanvas = new Canvas(canvasRef.current, {
-        width: 256,
-        height: 256,
+        width: 248,
+        height: 248,
       });
 
       initCanvas.backgroundColor = "#ffffff";
@@ -146,18 +146,64 @@ const App: React.FC = () => {
     }
   };
 
-  //匯出圖標
   const exportIcon = () => {
     if (!canvas) return;
 
-    canvas.discardActiveObject();
+    const originalWidth = canvas.width;
+    const originalHeight = canvas.height;
+
+    const newWidth = originalWidth + 8;
+    const newHeight = originalHeight + 8;
+
+    // 計算畫布的偏移
+    const offsetX = (newWidth - originalWidth) / 2;
+    const offsetY = (newHeight - originalHeight) / 2;
+
+    // 調整畫布大小並平移內容
+    canvas.setWidth(newWidth);
+    canvas.setHeight(newHeight);
+    canvas.getObjects().forEach((obj) => {
+      obj.left += offsetX;
+      obj.top += offsetY;
+      obj.setCoords();
+    });
+
+    // 添加白色邊框
+    const whiteRect = new Rect({
+      left: 0,
+      top: 0,
+      width: newWidth - 4,
+      height: newHeight - 4,
+      stroke: "white",
+      strokeWidth: 4,
+      fill: "transparent",
+      id: "border",
+    });
+    canvas.add(whiteRect);
     canvas.renderAll();
 
+    // 匯出圖像
     const dataURL = canvas.toDataURL({
       format: "png",
       multiplier: 0.5,
+      left: 0,
+      top: 0,
+      width: newWidth,
+      height: newHeight,
     });
 
+    // 還原
+    canvas.remove(whiteRect);
+    canvas.getObjects().forEach((obj) => {
+      obj.left -= offsetX;
+      obj.top -= offsetY;
+      obj.setCoords();
+    });
+    canvas.setWidth(originalWidth);
+    canvas.setHeight(originalHeight);
+    canvas.renderAll();
+
+    // 下載圖片
     const link = document.createElement("a");
     link.href = dataURL;
     link.download = "icon.png";

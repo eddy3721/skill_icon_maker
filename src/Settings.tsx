@@ -125,6 +125,20 @@ export const Settings = ({ canvas }: Props) => {
       clearSettings();
     });
 
+    canvas.on("object:added", (e) => {
+      const obj = e.target as any;
+      if (!obj) return;
+      if (
+        !(
+          obj.id &&
+          (obj.id.startsWith("vertical-") || obj.id.startsWith("horizontal-"))
+        )
+      ) {
+        canvas.setActiveObject(e.target);
+        handleObjectSelection(e.target);
+      }
+    });
+
     canvas.on("object:modified", (e) => {
       handleObjectSelection(e.target);
     });
