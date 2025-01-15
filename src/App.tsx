@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import { Field } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
+import fabric from "fabric";
 
 const App: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -163,10 +164,63 @@ const App: React.FC = () => {
     link.click();
   };
 
+  //匯出JSON
+  const exportJson = () => {
+    if (!canvas) return;
+
+    const json = canvas.toDatalessJSON([
+      "id",
+      "locked",
+      "selectable",
+      "evented",
+    ]);
+    const jsonString = JSON.stringify(json, null, 2);
+
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "canvas.json";
+    link.click();
+  };
+
+  //匯入JSON
+  const importJson = async () => {
+    if (!canvas) return;
+
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".json";
+
+    fileInput.onchange = async (e: any) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const json = JSON.parse(e.target?.result as string);
+        canvas.loadFromJSON(json).then(function () {
+          canvas.renderAll();
+        });
+      };
+
+      reader.readAsText(file);
+    };
+
+    fileInput.click();
+
+    return () => {
+      fileInput.remove();
+    };
+  };
+
   //工具列
   const tools = [
     { icon: "material-symbols:square-outline-rounded", onClick: addRectangle },
     { icon: "tdesign:file-icon", onClick: addIcon },
+    { icon: "tdesign:folder-import-filled", onClick: importJson },
+    { icon: "tdesign:folder-export-filled", onClick: exportJson },
     { icon: "material-symbols:download", onClick: exportIcon },
   ];
 

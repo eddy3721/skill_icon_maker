@@ -144,6 +144,17 @@ const LayerList = ({ canvas }: { canvas: Canvas | null }) => {
     }
   };
 
+  //刪除圖層
+  const deleteLayer = (layerId: any) => {
+    if (!canvas) return;
+
+    const object = canvas.getObjects().find((obj: any) => obj.id === layerId);
+    if (object) {
+      canvas.remove(object);
+      canvas.renderAll();
+    }
+  };
+
   useEffect(() => {
     if (!canvas) return;
 
@@ -168,7 +179,7 @@ const LayerList = ({ canvas }: { canvas: Canvas | null }) => {
 
   return (
     <>
-      <Table.ScrollArea maxH={300}>
+      <Table.ScrollArea maxH={320}>
         <Table.Root size="sm" interactive stickyHeader>
           <Table.Header>
             <Table.Row boxShadow="0 4px 6px rgba(0, 0, 0, 0.2)">
@@ -214,14 +225,28 @@ const LayerList = ({ canvas }: { canvas: Canvas | null }) => {
             {layers.map((layer) => (
               <Table.Row key={layer.id}>
                 <Table.Cell
+                  h="54px"
                   cursor="pointer"
                   bg={layer.id === selectedLayer ? "gray.600" : "gray.700"}
                   _hover={{ bg: "gray.600" }}
                   onClick={() => selectLayerInCanvas(layer.id)}
                 >
-                  <Flex gap={2} align="center">
-                    <Icon width={24} icon={getObjectIcon(layer.type)} />
-                    {layer.id}
+                  <Flex justify="space-between">
+                    <Flex gap={2} align="center">
+                      <Icon width={24} icon={getObjectIcon(layer.type)} />
+                      {layer.id}
+                    </Flex>
+                    {layer.id === selectedLayer && (
+                      <IconButton
+                        rounded="full"
+                        size={"sm"}
+                        variant="ghost"
+                        colorPalette={"red"}
+                        onClick={() => deleteLayer(layer.id)}
+                      >
+                        <Icon width={24} icon="maki:cross" />
+                      </IconButton>
+                    )}
                   </Flex>
                 </Table.Cell>
               </Table.Row>
